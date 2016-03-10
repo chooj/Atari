@@ -1,0 +1,1438 @@
+PFont f;
+boolean inIntro = true;
+boolean inMenu = false;
+boolean inBreakout = false;
+boolean inAsteroids = false;
+boolean inPong = false;
+boolean inInvaders = false;
+int x = 1;
+boolean canChoose = true;
+boolean canEnter = true;
+// breakout
+int bx = 300;
+int br;
+float bbx;
+float bby;
+float bbxs;
+float bbys;
+int brc = 7;
+int[] brx = new int[8*brc];
+int[] bry = new int[8*brc];
+int blives = 3;
+int bm;
+int bscore = 0;
+int bt = 1000;
+int[] bhighScores = {990, 870, 840};
+boolean bcan = true;
+boolean bcanReset = true;
+boolean bpaused = false;
+boolean bcanScore = true;
+// asteroids
+float ax;
+float ay;
+float axs = 0;
+float ays = 0;
+float axg = 0;
+float ayg = 0;
+float aangle = 0;
+int at = 0;
+int athel = 0;
+int ascore = 0;
+int alives = 3;
+int am = -1000;
+float[] alx = new float[20];
+float[] aly = new float[20];
+float[] alxs = new float[20];
+float[] alys = new float[20];
+float[] aax1 = new float[15];
+float[] aay1 = new float[15];
+float[] aax2 = new float[30];
+float[] aay2 = new float[30];
+float[] aax3 = new float[60];
+float[] aay3 = new float[60];
+float[] aaxs = new float[15];
+float[] aays = new float[15];
+float[] aarxs = new float[15];
+float[] aarys = new float[15];
+float[] aaxs2 = new float[30];
+float[] aays2 = new float[30];
+float[] aarxs2 = new float[30];
+float[] aarys2 = new float[30];
+int[] ahighScores = {1080, 910, 830};
+boolean aleft = false;
+boolean aright = false;
+boolean aup = false;
+boolean acanshoot = true;
+boolean apaused = false;
+boolean acanScore = true;
+// pong
+float puy;
+float pey;
+int puscore = 0;
+int pescore = 0;
+int pr;
+float pbx;
+float pby;
+float pbxs;
+float pbys;
+int pet = 0;
+int pm;
+int pscore = 1100;
+int[] phighScores = {900, 500, 400};
+boolean ppaused = false;
+boolean pcanScore = true;
+// invaders
+int im = -1001;
+int iudm = -2001;
+int ibh = 0;
+int ibhs = 6;
+int ix;
+int iw;
+int ilives = 3;
+int ilx = -100;
+int ily = -100;
+int iscore = 0;
+int iet = 0;
+int iex;
+int iey;
+int iexs;
+int ieys;
+int iethel = 0;
+float ilrand;
+int[] ielx = new int[20];
+int[] iely = new int[20];
+int[] ie1x = new int[15];
+int[] ie2x = new int[15];
+int[] ie3x = new int[15];
+int[] ie4x = new int[15];
+int[] ieax = new int[60];
+int[] ieyp = new int[60];
+int[] iem = new int[60];
+int[] ibx = new int[5];
+int[] iblives = {10, 10, 10, 10, 10};
+int[] ihighScores = {2160, 1460, 1030};
+boolean ileft = false;
+boolean iright = false;
+boolean ican = true;
+boolean ipaused = false;
+boolean icanScore = true;
+boolean icanReset = true;
+
+void intro() {
+  fill(255);
+  textFont(f, 200);
+  textAlign(CENTER);
+  text("ATARI", width/2, height/2 - 150);
+  text("CLASSICS", width/2, height/2 + 50);
+  textSize(80);
+  if (millis()*4 % 4000 < 2500) {
+    text("PRESS ENTER TO BEGIN", width/2, height/2 + 200);
+  }
+}
+
+void menu() {
+  stroke(255);
+  strokeWeight(3);
+  fill(0);
+  if (x == 1) {
+    rect(height/18, height/18, 650, height/2 - height/9, 20);
+  } else if (x == 2) {
+    rect(width - height/18 - 650, height/18, 650, height/2 - height/9, 20);
+  } else if (x == 3) {
+    rect(height/18, height/2 + height/18, 650, height/2 - height/9, 20);
+  } else if (x == 4) {
+    rect(width - height/18 - 650, height/2 + height/18, 650, height/2 - height/9, 20);
+  }
+  fill(255);
+  textFont(f, 65);
+  textAlign(CENTER);
+  text("ATARI BREAKOUT", width/4 + 20, height/4 - 60);
+  text("ASTEROIDS", 3*width/4 - 20, height/4 - 60);
+  text("PONG", width/4 + 20, 3*height/4 - 60);
+  text("SPACE INVADERS", 3*width/4 - 20, 3*height/4 - 60);
+  textSize(50);
+  for (int i = 0; i < bhighScores.length; i++) {
+    textAlign(LEFT);
+    text(str(i+1) + ". " + bhighScores[i], 100, height/4 + 20 + i*50);
+    text(str(i+1) + ". " + ahighScores[i], width/2 + 70, height/4 + 20 + i*50);
+    text(str(i+1) + ". " + phighScores[i], 100, 3*height/4 + 20 + i*50);
+    text(str(i+1) + ". " + ihighScores[i], width/2 + 70, 3*height/4 + 20 + i*50);
+  }
+  textAlign(CENTER);
+  textSize(40);
+  text("LEFT / RIGHT", width/2 - 220, height/4 + 40);
+  text("TO MOVE", width/2 - 220, height/4 + 90);
+  text("LEFT / RIGHT", width - 250, height/4);
+  text("TO ROTATE", width - 250, height/4 + 50);
+  text("UP / DOWN TO", width - 250, height/4 + 100);
+  text("MOVE / SHOOT", width - 250, height/4 + 150);
+  text("UP / DOWN", width/2 - 250, 3*height/4 + 40);
+  text("TO MOVE", width/2 - 250, 3*height/4 + 90);
+  text("LEFT / RIGHT", width - 250, 3*height/4);
+  text("TO MOVE", width - 250, 3*height/4 + 50);
+  text("UP TO SHOOT", width - 250, 3*height/4 + 100);
+}
+
+void breakout() {
+  bcanScore = true;
+  bt = bt + 1;
+  noStroke();
+  fill(255);
+  for (int i = 0; i < brx.length; i++) {
+    rect(brx[i], bry[i], width/10, height/30);
+    if (brx[i] < width) {
+      bcan = true;
+    }
+    if (bbx + br > brx[i] && bbx - br < brx[i] + width/10 && bby + br > bry[i] && bby - br < bry[i] + height/30) {
+      if (bbx + br <= brx[i] + abs(bbxs)) {
+        bbxs = -abs(bbxs);
+      }
+      if (bbx - br >= brx[i] + width/10 - abs(bbxs)) {
+        bbxs = abs(bbxs);
+      }
+      if (bbx + br > brx[i] + abs(bbxs) && bbx - br < brx[i] + width/10 - abs(bbxs)) {
+        if (bby > bry[i] + height/60) {
+          bbys = abs(bbys);
+        } else {
+          bbys = -abs(bbys);
+        }
+      }
+      brx[i] = width + 100;
+      bry[i] = height + 100;
+      bscore = bscore + 10;
+    }
+  }
+  if (bscore % 560 == 0) {
+    if (bcanReset && bscore != 0) {
+      breset();
+      for (int i = 0; i < brx.length; i++) {
+        brx[i] = 3*width/100 + floor(i/brc)*3*width/25;
+        bry[i] = height/30 + (i%brc)*height/15;
+      }
+      bm = millis();
+      bcanReset = false;
+    }
+  } else {
+    bcanReset = true;
+  }
+  rect(bx - width/10, 59*height/60, width/5, height/60);
+  ellipse(bbx, bby, br*2, br*2);
+  textFont(f, 3*width/100);
+  textAlign(LEFT);
+  text("LIVES: " + blives, width/20, 19*height/20);
+  textAlign(RIGHT);
+  text("SCORE: " + bscore, 19*width/20, 19*height/20);
+  if (millis() - bm > 1000) {
+    if (blives > 0 && bpaused == false) {
+      bbx = bbx + bbxs;
+      bby = bby + bbys;
+    }
+  } else {
+    if (millis() - bm > 0 && millis() - bm <= 1000) {
+      breset();
+    }
+  }
+  if (bbxs > 0) {
+    if (bbxs < 10) {
+      bbxs = bbxs + 0.005;
+    }
+  } else {
+    if (bbxs > -10) {
+      bbxs = bbxs - 0.005;
+    }
+  }
+  if (bbys > 0) {
+    if (bbys < 7) {
+      bbys = bbys + 0.005;
+    }
+  } else {
+    if (bbys > -7) {
+      bbys = bbys - 0.005;
+    }
+  }
+  if (bbx - br < 0) {
+    bbxs = abs(bbxs);
+  }
+  if (bbx + br > width) {
+    bbxs = -abs(bbxs);
+  }
+  if (bby - br < 0) {
+    bbys = abs(bbys);
+  }
+  if (bbx + br > bx - width/10 && bbx - br < bx + width/10 && bby + br > 59*height/60 && bby - br < 59*height/60) {
+    bbys = -abs(bbys);
+    bbxs = (bbx - (bx))/10;
+  }
+  if (bby > height + abs(bbys*30) && bcan) {
+    blives = blives - 1;
+    bm = millis();
+  }
+  if (blives == 0) {
+    finish();
+    text("GAME OVER", width/2, height/2);
+    textSize(40);
+    if (bscore > bhighScores[2]) {
+      text("NEW HIGH SCORE! YOU SCORED: " + bscore, width/2, height/2 + 60);
+    } else {
+      text("YOU SCORED: " + bscore, width/2, height/2 + 60);
+    }
+  }
+  if (bpaused) {
+    paused();
+    text("PAUSED", width/2, height/2);
+  }
+}
+void breset() {
+  bx = 300;
+  bbx = br*2;
+  bby = 2*height/3;
+  bbxs = 5;
+  bbys = 4;
+}
+void bscoring() {
+  for (int i = 0; i < bhighScores.length; i++) {
+    if (bscore > bhighScores[i] && bcanScore) {
+      if (i == 0) {
+        bhighScores[2] = bhighScores[1];
+        bhighScores[1] = bhighScores[0];
+      } else  if (i == 1) {
+        bhighScores[2] = bhighScores[1];
+      }
+      bhighScores[i] = bscore;
+      bcanScore = false;
+    }
+  }
+}
+void ballReset() {
+  breset();
+  blives = 3;
+  bscore = 0;
+  for (int i = 0; i < brx.length; i++) {
+    brx[i] = 3*width/100 + floor(i/brc)*3*width/25;
+    bry[i] = height/30 + (i%brc)*height/15;
+  }
+  x = 1;
+  bpaused = false;
+}
+
+void asteroids() {
+  acanScore = true;
+  at = at + 1;
+  if (millis() - am >= 1000 && millis() - am < 1000 + frameRate && alives > 0) {
+    ax = width/2;
+    ay = height/2;
+  }
+  for (int i = 0; i < aax1.length; i++) {
+    if (alives > 0 && millis() - am > 3001 && ax > 0 && ax < width && ay > 0 && ay < height && aax1[i] + width/16 - 20 > ax - 40 && aax1[i] - width/16 + 20 < ax + 40 && aay1[i] + width/16 - 20 > ay - 40 && aay1[i] - width/16 + 20 < ay + 40) {
+      alives = alives - 1;
+      aax2[i*2] = aax1[i] - width/32 - width/64;
+      aax2[i*2+1] = aax1[i] + width/32 + width/64;
+      aay2[i*2] = aay1[i] + width/64;
+      aay2[i*2+1] = aay1[i] - width/64;
+      aax1[i] = random(0, 3*width/4);
+      aay1[i] = -width/4;
+      am = millis();
+      aaxs2[i*2] = aaxs[i] + aaxs[i]/random(2, 5);
+      aaxs2[i*2+1] = aaxs[i] + aaxs[i]/random(2, 5);
+      aays2[i*2] = aays[i] + aays[i]/random(2, 5);
+      aays2[i*2+1] = aays[i] + aays[i]/random(2, 5);
+      aarxs2[i*2] = 2*aaxs2[i*2];
+      aarxs2[i*2+1] = 2*aaxs2[i*2+1];
+      aarys2[i*2] = 2*aays2[i*2];
+      aarys2[i*2+1] = 2*aays2[i*2+1];
+    }
+    if (at == i*120) {
+      aaxs[i] = random(-2, 2);
+      aays[i] = random(-2, 2);
+    }
+    fill(0);
+    stroke(255);
+    strokeWeight(2);
+    ellipse(aax1[i], aay1[i], width/8, width/8);
+    if (millis() - am > 1000 && alives > 0 && apaused == false) {
+      aax1[i] = aax1[i] + aaxs[i];
+      aay1[i] = aay1[i] + aays[i];
+    }
+    if (aax1[i] < -width/8) {
+      aax1[i] = 9*width/8;
+    }
+    if (aax1[i] > 9*width/8) {
+      aax1[i] = -width/8;
+    }
+    if (aay1[i] < -height/8) {
+      aay1[i] = 9*height/8;
+    }
+    if (aay1[i] > 9*height/8) {
+      aay1[i] = -height/8;
+    }
+    for (int j = 0; j < alx.length; j++) {
+      if (alives > 0 && alx[j] > 0 && alx[j] < width && aly[j] > 0 && aly[j] < height && alx[j] > aax1[i] - width/16 && alx[j] < aax1[i] + width/16 && aly[j] > aay1[i] - width/16 && aly[j] < aay1[i] + width/32) {
+        alx[j] = width + 100;
+        alxs[j] = 0;
+        aax2[i*2] = aax1[i] - width/32 - width/64;
+        aax2[i*2+1] = aax1[i] + width/32 + width/64;
+        aay2[i*2] = aay1[i] + width/64;
+        aay2[i*2+1] = aay1[i] - width/64;
+        aax1[i] = random(0, 3*width/4);
+        aay1[i] = -width/4;
+        ascore = ascore + 30;
+        aaxs2[i*2] = aaxs[i] + aaxs[i]/random(1.5, 5);
+        aaxs2[i*2+1] = aaxs[i] + aaxs[i]/random(1.5, 5);
+        aays2[i*2] = aays[i] + aays[i]/random(1.5, 5);
+        aays2[i*2+1] = aays[i] + aays[i]/random(1.5, 5);
+        aarxs2[i*2] = aaxs2[i*2];
+        aarxs2[i*2+1] = aaxs2[i*2+1];
+        aarys2[i*2] = aays2[i*2];
+        aarys2[i*2+1] = aays2[i*2+1];
+      }
+    }
+  }
+  for (int i = 0; i < aax2.length; i++) {
+    if (alives > 0 && millis() - am > 3001 && ax > 0 && ax < width && ay > 0 && ay < height && aax2[i] + width/32 - 10 > ax - 40 && aax2[i] - width/32 + 10 < ax + 40 && aay2[i] + width/32 - 10 > ay - 40 && aay2[i] - width/32 + 10 < ay + 40) {
+      alives = alives - 1;
+      aax3[i*2] = aax2[i] - width/128;
+      aax3[i*2+1] = aax2[i] + width/128;
+      aay3[i*2] = aay2[i] - width/64 - width/128;
+      aay3[i*2+1] = aay2[i] + width/64 + width/128;
+      aax2[i] = -width*100;
+      aay2[i] = -height*100;
+      am = millis();
+      axs = 0;
+      ays = 0;
+    }
+    fill(0);
+    stroke(255);
+    strokeWeight(2);
+    ellipse(aax2[i], aay2[i], width/16, width/16);
+    if (millis() - am > 1000 && alives > 0 && apaused == false) {
+      aax2[i] = aax2[i] + aaxs2[i] + aarxs2[i];
+      aay2[i] = aay2[i] + aays2[i] + aarys2[i];
+      aarxs2[i] *= 0.98;
+      aarys2[i] *= 0.98;
+    }
+    for (int j = 0; j < alx.length; j++) {
+      if (alives > 0 && alx[j] > 0 && alx[j] < width && aly[j] > 0 && aly[j] < height && alx[j] > aax2[i] - width/32 && alx[j] < aax2[i] + width/32 && aly[j] > aay2[i] - width/32 && aly[j] < aay2[i] + width/32) {
+        alx[j] = width + 100;
+        alxs[j] = 0;
+        aax3[i*2] = aax2[i] - width/128;
+        aax3[i*2+1] = aax2[i] + width/128;
+        aay3[i*2] = aay2[i] - width/64 - width/128;
+        aay3[i*2+1] = aay2[i] + width/64 + width/128;
+        aax2[i] = -width*100;
+        aay2[i] = -height*100;
+        ascore = ascore + 20;
+        aarxs[floor(i/2)] = 2*aaxs[floor(i/2)];
+        aarys[floor(i/2)] = 2*aays[floor(i/2)];
+      }
+    }
+  }
+  for (int i = 0; i < aax3.length; i++) {
+    if (alives > 0 && millis() - am > 3001 && ax > 0 && ax < width && ay > 0 && ay < height && aax3[i] + width/64 - 5 > ax - 40 && aax3[i] - width/64 + 5 < ax + 40 && aay3[i] + width/64 - 5 > ay - 40 && aay3[i] - width/64 + 5 < ay + 40) {
+      alives = alives - 1;
+      aax3[i] = -width*100;
+      aay3[i] = -height*100;
+      am = millis();
+      axs = 0;
+      ays = 0;
+    }
+    fill(0);
+    stroke(255);
+    strokeWeight(2);
+    ellipse(aax3[i], aay3[i], width/32, width/32);
+    if (millis() - am > 1000 && alives > 0 && apaused == false) {
+      aax3[i] = aax3[i] + aaxs[floor(i/4)] + aarxs[floor(i/4)];
+      aay3[i] = aay3[i] + aays[floor(i/4)] + aarys[floor(i/4)];
+      aarxs[floor(i/4)] *= 0.98;
+      aarys[floor(i/4)] *= 0.98;
+    }
+    for (int j = 0; j < alx.length; j++) {
+      if (alives > 0 && alx[j] > 0 && alx[j] < width && aly[j] > 0 && aly[j] < height && alx[j] > aax3[i] - width/64 && alx[j] < aax3[i] + width/64 && aly[j] > aay3[i] - width/64 && aly[j] < aay3[i] + width/64) {
+        alx[j] = width + 100;
+        alxs[j] = 0;
+        aax3[i] = -width*100;
+        aay3[i] = -height*100;
+        ascore = ascore + 10;
+      }
+    }
+  }
+  for (int i = 0; i < alx.length; i++) {
+    strokeWeight(1);
+    stroke(255);
+    line(alx[i], aly[i], alx[i] + alxs[i]*2, aly[i] + alys[i]*2);
+    if (millis() - am > 1000 && alives > 0 && apaused == false) {
+      alx[i] = alx[i] + alxs[i];
+      aly[i] = aly[i] + alys[i];
+    }
+  }
+  fill(255);
+  textFont(f, 3*width/100);
+  textAlign(LEFT);
+  text("LIVES: " + alives, width/20, 19*height/20);
+  textAlign(RIGHT);
+  text("SCORE: " + ascore, 19*width/20, 19*height/20);
+  if (millis() - am > 1000 && alives <= 0) {
+    finish();
+    text("GAME OVER", width/2, height/2);
+    textSize(40);
+    if (ascore > ahighScores[2]) {
+      text("NEW HIGH SCORE! YOU SCORED: " + ascore, width/2, height/2 + 60);
+    } else {
+      text("YOU SCORED: " + ascore, width/2, height/2 + 60);
+    }
+  }
+  if (apaused) {
+    paused();
+    text("PAUSED", width/2, height/2);
+  }
+  if (alives > 0 && apaused == false && millis() - am > 1000) {
+    textFont(f, 80);
+    textAlign(CENTER);
+    translate(ax, ay);
+    rotate(aangle);
+    stroke(255);
+    strokeWeight(2);
+    if (millis() - am > 3000) {
+      line(0, -37, -21, 20);
+      line(1, -37, 22, 20);
+      line(-16, 8, 17, 8);
+    }
+    ax = ax + axs;
+    ay = ay + ays;
+    if (millis() - am <= 3000 && millis() % 250 < 125) {
+      line(0, -37, -21, 20);
+      line(1, -37, 22, 20);
+      line(-16, 8, 17, 8);
+    }
+    if (millis() - am >= 1000 && millis() - am <= 1000 + frameRate) {
+      axs = 0;
+      ays = 0;
+    }
+  }
+  if (apaused == false && millis() - am <= 1000) {
+    stroke(255);
+    strokeWeight(1);
+    for (int i = 0; i < 10; i++) {
+      line(cos(i*2*PI/10)*25 + ax, sin(i*2*PI/10)*25 + ay, cos(i*2*PI/10)*(5*(floor((millis()-am)%1000)/333)+30) + ax, sin(i*2*PI/10)*(5*(floor((millis()-am)%1000)/333)+30) + ay);
+    }
+  }
+  if (ax < -40) {
+    ax = width + 40;
+  }
+  if (ax > width + 40) {
+    ax = -40;
+  }
+  if (ay < -40) {
+    ay = height + 40;
+  }
+  if (ay > height + 40) {
+    ay = -40;
+  }
+  if (alives > 0 && apaused == false) {
+    if (aleft == true) {
+      aangle = aangle - 0.07;
+    }
+    if (aright == true) {
+      aangle = aangle + 0.07;
+    }
+  }
+  if (aup == true && millis() - am > 1000) {
+    if (alives > 0) {
+      if (millis() % 250 < 125) {
+        stroke(255);
+        strokeWeight(1);
+        noFill();
+        line(-7, 10, 0, 30);
+        line(7, 10, 0, 30);
+      }
+    }
+    axg = sin(aangle)*10;
+    ayg = -cos(aangle)*10;
+    if ((axs < axg)||(axs > axg)) {
+      axs = axs + (axg-axs)/100;
+    }
+    if ((ays < ayg)||(ays > ayg)) {
+      ays = ays + (ayg-ays)/100;
+    }
+  }
+  if (alives <= 0) {
+    alives = 0;
+  }
+}
+void areset() {
+  am = -1000;
+  at = 0;
+  ax = width/2;
+  ay = height/2;
+  axs = 0;
+  ays = 0;
+  axg = 0;
+  ayg = 0;
+  aangle = 0;
+  ascore = 0;
+  alives = 3;
+  aleft = false;
+  aright = false;
+  aup = false;
+  acanshoot = true;
+  apaused = false;
+  for (int i = 0; i < aax1.length/2; i++) {
+    aax1[i] = random(0, 3*width/4);
+    aay1[i] = -width/8;
+    aax1[i+aax1.length/2] = -width/8;
+    aay1[i+aax1.length/2] = random(0, 3*height/4);
+  }
+  aax1[aax1.length-1] = -width/8;
+  aay1[aay1.length-1] = -width/8;
+  for (int i = 0; i < aax1.length; i++) {
+    aaxs[i] = 0;
+    aays[i] = 0;
+  }
+  for (int i = 0; i < aax2.length; i++) {
+    aax2[i] = -width;
+    aay2[i] = -height;
+  }
+  for (int i = 0; i < aax3.length; i++) {
+    aax3[i] = -width;
+    aay3[i] = -height;
+  }
+  for (int i = 0; i < alx.length; i++) {
+    alx[i] = -100;
+    alxs[i] = 0;
+  }
+}
+void ascoring() {
+  for (int i = 0; i < ahighScores.length; i++) {
+    if (ascore > ahighScores[i] && acanScore) {
+      if (i == 0) {
+        ahighScores[2] = ahighScores[1];
+        ahighScores[1] = ahighScores[0];
+      } else  if (i == 1) {
+        ahighScores[2] = ahighScores[1];
+      }
+      ahighScores[i] = ascore;
+      acanScore = false;
+    }
+  }
+}
+
+void pong() {
+  pcanScore = true;
+  stroke(255);
+  strokeWeight(1);
+  line(width/2, 0, width/2, height);
+  noStroke();
+  fill(255);
+  rect(0, puy, width/100, height/6);
+  rect(99*width/100, pey, width/100, height/6);
+  ellipse(pbx, pby, pr*2, pr*2);
+  textFont(f, height/7.5);
+  textAlign(CENTER);
+  text(puscore, width/4, height/6);
+  text(pescore, 3*width/4, height/6);
+  if (millis() - pm > 1000 && ppaused == false) {
+    pbx = pbx + pbxs;
+    pby = pby + pbys;
+  }
+  if (pbxs > 0) {
+    if (pbxs < 10) {
+      pbxs = pbxs + 0.01;
+    }
+  } else {
+    if (pbxs > -10) {
+      pbxs = pbxs - 0.01;
+    }
+  }
+  if (pby + pr > height) {
+    pbys = -abs(pbys);
+  }
+  if (pby - pr < 0) {
+    pbys = abs(pbys);
+  }
+  if (millis() - pm > 1000 && pbx - pr < width/100 && pbx + pr > width/100 && pby + pr > puy && pby - pr < puy + height/6) {
+    pbxs = abs(pbxs);
+    pbys = (pby - (puy + height/12))/5;
+  }
+  if (millis() - pm > 1000 && pbx + pr > 99*width/100 && pbx - pr < 99*width/100 && pby + pr > pey && pby - pr < pey + height/6) {
+    pbxs = -abs(pbxs);
+    pbys = (pby - (pey + height/12))/5;
+  }
+  pet = pet + 1;
+  if (pet > 10) {
+    if (pby + pr > pey + height/6 && pey + 100 < height) {
+      pey = pey + height/12;
+    }
+    if (pby - pr < pey && pey > 0) {
+      pey = pey - height/12;
+    }
+    pet = 0;
+  }
+  if (pbx < -abs(pbxs*30)) {
+    pescore = pescore + 1;
+    pscore = pscore - 100;
+    preset();
+  }
+  if (pbx > width + abs(pbxs*30)) {
+    puscore = puscore + 1;
+    preset();
+  }
+  fill(255);
+  textFont(f, 3*width/100);
+  textAlign(RIGHT);
+  text("SCORE: " + pscore, 19*width/20, 19*height/20);
+  if (puscore == 11) {
+    finish();
+    pm = millis();
+    text("YOU WIN", width/2, 300);
+    textSize(40);
+    if (pscore > phighScores[2]) {
+      text("NEW HIGH SCORE! YOU SCORED: " + pscore, width/2, height/2 + 60);
+    } else {
+      text("YOU SCORED: " + pscore, width/2, height/2 + 60);
+    }
+  }
+  if (pescore == 11) {
+    finish();
+    pm = millis();
+    text("YOU LOSE", width/2, height/2);
+    textSize(40);
+    if (pscore > phighScores[2]) {
+      text("NEW HIGH SCORE! YOU SCORED: " + pscore, width/2, height/2 + 60);
+    } else {
+      text("YOU SCORED: " + pscore, width/2, height/2 + 60);
+    }
+  }
+  if (ppaused) {
+    paused();
+    text("PAUSED", width/2, height/2);
+  }
+}
+void preset() {
+  pr = width/100;
+  puy = height/2.4;
+  pey = height/2.4;
+  pbx = width - 10 - pr;
+  pby = height/2;
+  pbxs = -width/250;
+  pbys = height/184.62;
+  pm = millis();
+}
+void pscoring() {
+  for (int i = 0; i < phighScores.length; i++) {
+    if (pscore > bhighScores[i] && pcanScore) {
+      if (i == 0) {
+        phighScores[2] = phighScores[1];
+        phighScores[1] = phighScores[0];
+      } else  if (i == 1) {
+        phighScores[2] = phighScores[1];
+      }
+      phighScores[i] = pscore;
+      pcanScore = false;
+    }
+  }
+}
+void pallReset() {
+  preset();
+  puscore = 0;
+  pescore = 0;
+  pscore = 1100;
+  x = 1;
+  ppaused = false;
+}
+
+void invaders() {
+  icanScore = true;
+  noStroke();
+  fill(255);
+  rect(ix - iw, 29*height/30, iw*2, height/30);
+  rect(ix - width/33.33, 19*height/20, width/16.67, height/20);
+  rect(ix - width/184.26, 11*height/12, width/71.43, height/12);
+  fill(0);
+  rect(ix-iw, 11*height/12, iw*2, ibh);
+  if (millis() - iudm < 2000) {
+    ibh += ibhs;
+    if (ibhs == 6) {
+      ibhs = -4;
+    } else if (ibhs == -4) {
+      ibhs = 6;
+    }
+  } else {
+    ibh = 0;
+  }
+  fill(255);
+  textFont(f, 3*width/100);
+  textAlign(RIGHT);
+  text("SCORE: " + iscore, 19*width/20, 19*height/20);
+  textAlign(LEFT);
+  text("LIVES: " + ilives, width/20, 19*height/20);
+  if (ileft == true && ix - iw > 0 && ipaused == false && millis() - iudm >= 2000) {
+    ix = ix - 5;
+  }
+  if (iright == true && ix + iw < width && ipaused == false && millis() - iudm >= 2000) {
+    ix = ix + 5;
+  }
+  if (ipaused == false && millis() - iudm >= 2000) {
+    ily = ily - 14;
+  }
+  if (ily < 0) {
+    ilx = -100;
+  }
+  for (int i = 0; i < ibx.length; i++) {
+    if (iblives[i] > 0) {
+      fill(255);
+      if (iblives[i] < 10) {
+        for (int j = 0; j < 10 + iblives[i]; j++) {
+          for (int k = 0; k < round(5+(iblives[i]/2)); k++) {
+            rect(ibx[i]+(j*144)/(10+iblives[i]), 600+(k*75)/round(5+(iblives[i]/2)), 7, 7);
+          }
+        }
+      } else if (iblives[i] == 10) {
+        rect(ibx[i], 600, 144, 75);
+      }
+    }
+  }
+  for (int i = 0; i < ielx.length; i++) {
+    for (int j = 0; j < ibx.length; j++) {
+      stroke(255);
+      strokeWeight(2);
+      line(ilx, ily, ilx, ily - height/30);
+      line(ielx[i], iely[i], ielx[i], iely[i] + height/30);
+      if (ipaused == false && millis() - iudm >= 2000) {
+        iely[i] = iely[i] + 2;
+      }
+      if (iblives[j] > 0 && ielx[i] > ibx[j] && ielx[i] < ibx[j] + width/10 && iely[i] < 3*height/4 && iely[i] + height/30 > 2*height/3 && ipaused == false) {
+        ielx[i] = width + 100;
+        iblives[j] = iblives[j] - 1;
+      }
+      if (iblives[j] > 0 && ilx > ibx[j] && ilx < ibx[j] + width/10 && ily - height/30 < 3*height/4 && ily > 2*height/3 && ipaused == false) {
+        ilx = -100;
+        iblives[j] = iblives[j] - 1;
+      }
+    }
+    if (ielx[i] > ix - iw && ielx[i] < ix + iw && iely[i] + height/30 > 19*height/20 && iely[i] < height && ipaused == false) {
+      ielx[i] = width + 100;
+      ilives = ilives - 1;
+      iudm = millis();
+    }
+  }
+  if (ipaused == false && millis() - iudm >= 2000) {
+    iet = iet + 1;
+  }
+  for (int i = 0; i < 6; i++) {
+    if (ilives > 0 && iet == 30*i && millis() - iudm >= 2000) {
+      iex = iex + iexs;
+    }
+  }
+  if (ilives > 0 && iet == 180 && millis() - iudm >= 2000) {
+    iey = iey + ieys;
+    if (iey <= -ieys*4) {
+      ieys = abs(ieys);
+    }
+    if (iey >= 0) {
+      ieys = -abs(ieys);
+    }
+    iexs = -iexs;
+    iet = 0;
+  }
+  if (iet % 90 == 0 && ilives > 0 && millis() - iudm >= 2000 && millis() - im > 1001) {
+    ilrand = random(-0.49, ieax.length-.51);
+    while (ieax[round(ilrand)] > width) {
+      ilrand = random(-0.49, ieax.length-.51);
+    }
+    ielx[iethel] = ieax[round(ilrand)] + width/50 + iex;
+    iely[iethel] = ieyp[round(ilrand)] + iey;
+    iethel = iethel + 1;
+    if (iethel > ielx.length - 1) {
+      iethel = 0;
+    }
+  }
+  for (int i = 0; i < ie1x.length; i++) {
+    ieax[i] = ie1x[i];
+    ieax[i+15] = ie2x[i];
+    ieax[i+30] = ie3x[i];
+    ieax[i+45] = ie4x[i];
+    ieyp[i] = 480 + iey;
+    ieyp[i+15] = 400 + iey;
+    ieyp[i+30] = 320 + iey;
+    ieyp[i+45] = 260 + iey;
+    noStroke();
+    fill(255);
+    if (iem[i] < 0) {
+      noStroke();
+      triangle(ie1x[i] + iex, height/2 + iey, ie1x[i] + width/50 + iex, height/1.76 + iey, ie1x[i] + width/25 + iex, height/2 + iey);
+    } else {
+      if (millis() - iem[i] < 300) {
+        stroke(255);
+        strokeWeight(2);
+        for (int j = 0; j < 10; j++) {
+          line(cos(j*2*PI/10)*25 + ie1x[i] + iex + width/50, sin(j*2*PI/10)*25 + 480 + iey, cos(j*2*PI/10)*(5*(floor((millis()-iem[i])%300)/100)+30) + ie1x[i] + iex + width/50, sin(j*2*PI/10)*(5*(floor((millis()-iem[i])%300)/100)+30) + 480 + iey);
+        }
+      } else {
+        ie1x[i] = width + 100;
+      }
+    }
+    if (iem[i+15] < 0) {
+      noStroke();
+      ellipse(ie2x[i] + width/50 + iex, height/2.22 + iey, width/25, width/25);
+    } else {
+      if (millis() - iem[i+15] < 300) {
+        stroke(255);
+        strokeWeight(2);
+        for (int j = 0; j < 10; j++) {
+          line(cos(j*2*PI/10)*25 + ie2x[i] + iex + width/50, sin(j*2*PI/10)*25 + 405 + iey, cos(j*2*PI/10)*(5*(floor((millis()-iem[i+15])%300)/100)+30) + ie2x[i] + iex + width/50, sin(j*2*PI/10)*(5*(floor((millis()-iem[i+15])%300)/100)+30) + 405 + iey);
+        }
+      } else {
+        ie2x[i] = width + 100;
+      }
+    }
+    if (iem[i+30] < 0) {
+      noStroke();
+      rect(ie3x[i] + iex, height/3 + iey, width/25, width/25);
+    } else {
+      if (millis() - iem[i+30] < 300) {
+        stroke(255);
+        strokeWeight(2);
+        for (int j = 0; j < 10; j++) {
+          line(cos(j*2*PI/10)*25 + ie3x[i] + iex + width/50, sin(j*2*PI/10)*25 + 325 + iey, cos(j*2*PI/10)*(5*(floor((millis()-iem[i+30])%300)/100)+30) + ie3x[i] + iex + width/50, sin(j*2*PI/10)*(5*(floor((millis()-iem[i+30])%300)/100)+30) + 325 + iey);
+        }
+      } else {
+        ie3x[i] = width + 100;
+      }
+    }
+    if (iem[i+45] < 0) {
+      noStroke();
+      triangle(ie4x[i] + iex, height/3.53 + iey, ie4x[i] + width/50 + iex, height/4 + iey, ie4x[i] + width/50 + iex, height/3.16 + iey);
+      triangle(ie4x[i] + width/25 + iex, height/3.53 + iey, ie4x[i] + width/50 + iex, height/4 + iey, ie4x[i] + width/50 + iex, height/3.16 + iey);
+    } else {
+      if (millis() - iem[i+45] < 300) {
+        stroke(255);
+        strokeWeight(2);
+        for (int j = 0; j < 10; j++) {
+          line(cos(j*2*PI/10)*25 + ie4x[i] + iex + width/50, sin(j*2*PI/10)*25 + 260 + iey, cos(j*2*PI/10)*(5*(floor((millis()-iem[i+45])%300)/100)+30) + ie4x[i] + iex + width/50, sin(j*2*PI/10)*(5*(floor((millis()-iem[i+45])%300)/100)+30) + 260 + iey);
+        }
+      } else {
+        ie4x[i] = width + 100;
+      }
+    }
+    if (iem[i] < 0 && ilives > 0 && ilx > ie1x[i] + iex && ilx < ie1x[i] + width/25 + iex && ily - height/30 < height/1.76 + iey && ily > height/2 + iey) {
+      iem[i] = millis();
+      ilx = -100;
+      iscore = iscore + 10;
+    }
+    if (iem[i+15] < 0 && ilives > 0 && ilx > ie2x[i] + iex && ilx < ie2x[i] + width/25 + iex && ily - height/30 < height/2.22 + width/50 + iey && ily > height/2.22 - width/50 + iey) {
+      iem[i+15] = millis();
+      ilx = -100;
+      iscore = iscore + 20;
+    }
+    if (iem[i+30] < 0 && ilives > 0 && ilx > ie3x[i] + iex && ilx < ie3x[i] + width/25 + iex && ily - height/30 < height/3 + width/25 + iey && ily > height/3 + iey) {
+      iem[i+30] = millis();
+      ilx = -100;
+      iscore = iscore + 30;
+    }
+    if (iem[i+45] < 0 && ilives > 0 && ilx > ie4x[i] + iex && ilx< ie4x[i] + width/25 + iex && ily - height/30 < height/3.16 + iey && ily > height/4 + iey) {
+      iem[i+45] = millis();
+      ilx = -100;
+      iscore = iscore + 40;
+    }
+  }
+  if (iscore % 1500 == 0 && iscore != 0) {
+    if (icanReset) {
+      im = millis();
+      icanReset = false;
+    }
+    if (ican && millis() - im > 1000) {
+      ireset();
+      ican = false;
+    }
+  } else {
+    if (ilives > 0) {
+      icanReset = true;
+      ican = true;
+    }
+  }
+  if (ilives <= 0) {
+    ilives = 0;
+    if (icanReset) {
+      im = millis();
+      icanReset = false;
+    }
+    if (millis() - im > 2000) {
+      finish();
+      text("GAME OVER", width/2, height/2);
+      textSize(40);
+      if (iscore > ihighScores[2]) {
+        text("NEW HIGH SCORE! YOU SCORED: " + iscore, width/2, height/2 + 60);
+      } else {
+        text("YOU SCORED: " + iscore, width/2, height/2 + 60);
+      }
+    }
+  }
+  if (ipaused) {
+    paused();
+    text("PAUSED", width/2, height/2);
+  }
+}
+void ireset() {
+  ix = width/2;
+  iet = 0;
+  iex = 0;
+  iey = 0;
+  iexs = abs(iexs);
+  ieys = abs(ieys);
+  for (int i = 0; i < ie1x.length; i++) {
+    ie1x[i] = round(width/50 + i*width/16.67);
+    ie2x[i] = round(width/50 + i*width/16.67);
+    ie3x[i] = round(width/50 + i*width/16.67);
+    ie4x[i] = round(width/50 + i*width/16.67);
+  }
+  for (int i = 0; i < iem.length; i++) {
+    iem[i] = -1;
+  }
+  for (int i = 0; i < ielx.length; i++) {
+    ielx[i] = width + 100;
+  }
+  for (int i = 0; i < iblives.length; i++) {
+    iblives[i] = 10;
+  }
+  ilx = -100;
+}
+void iscoring() {
+  for (int i = 0; i < ihighScores.length; i++) {
+    if (iscore > ihighScores[i] && icanScore) {
+      if (i == 0) {
+        ihighScores[2] = ihighScores[1];
+        ihighScores[1] = ihighScores[0];
+      } else  if (i == 1) {
+        ihighScores[2] = ihighScores[1];
+      }
+      ihighScores[i] = iscore;
+      icanScore = false;
+    }
+  }
+}
+void iallReset() {
+  ireset();
+  ilives = 3;
+  iscore = 0;
+  ibh = 0;
+  im = -1001;
+  iudm = -2001;
+  for (int i = 0; i < iblives.length; i++) {
+    iblives[i] = 10;
+  }
+  x = 1;
+  ipaused = false;
+}
+
+void template() {
+  background(0);
+  noFill();
+  stroke(255);
+  strokeWeight(3);
+  if (x == 1) {
+    rect(width/2 - 200, 545, 400, 80, 10);
+  } else if (x == 2) {
+    rect(width/2 - 200, 645, 400, 80, 10);
+  }
+  fill(255);
+  textSize(50);
+  textAlign(CENTER);
+  text("MENU", width/2, 700);
+}
+
+void finish() {
+  template();
+  text("PLAY AGAIN", width/2, 600);
+  textSize(100);
+}
+
+void paused() {
+  template();
+  text("RESUME", width/2, 600);
+  textSize(100);
+}
+
+void setup() {
+  fullScreen();
+  f = createFont("Monospaced", 50);
+  // breakout
+  br = width/100;
+  bbx = br*2;
+  bby = 2*height/3;
+  bbxs = width/200;
+  bbys = height/150;
+  for (int i = 0; i < brx.length; i++) {
+    brx[i] = 3*width/100 + floor(i/brc)*3*width/25;
+    bry[i] = height/30 + (i%brc)*height/15;
+  }
+  // asteroids
+  areset();
+  // pong
+  preset();
+  pm = millis();
+  // invaders
+  ix = width/2;
+  iw = round(width/16.67);
+  for (int i = 0; i < ibx.length; i++) {
+    ibx[i] = width/20 + i*7*width/35;
+  }
+  iexs = width/54;
+  ieys = width/36;
+  for (int i = 0; i < ielx.length; i++) {
+    ielx[i] = -100;
+  }
+  for (int i = 0; i < ie1x.length; i++) {
+    ie1x[i] = round(width/50 + i*width/16.67);
+    ie2x[i] = round(width/50 + i*width/16.67);
+    ie3x[i] = round(width/50 + i*width/16.67);
+    ie4x[i] = round(width/50 + i*width/16.67);
+    ieax[i] = ie1x[i];
+    ieax[i+15] = ie2x[i];
+    ieax[i+30] = ie3x[i];
+    ieax[i+45] = ie4x[i];
+    ieyp[i] = 480;
+    ieyp[i+15] = 400;
+    ieyp[i+30] = 320;
+    ieyp[i+45] = 260;
+  }
+  for (int i = 0; i < iem.length; i++) {
+    iem[i] = -1;
+  }
+}
+
+void draw() {
+  background(0);
+  noCursor();
+  if (inIntro) {
+    intro();
+  }
+  if (inMenu) {
+    menu();
+  }
+  if (inBreakout) {
+    breakout();
+  }
+  if (inAsteroids) {
+    asteroids();
+  }
+  if (inPong) {
+    pong();
+  }
+  if (inInvaders) {
+    invaders();
+  }
+}
+
+void keyPressed() {
+  if (inBreakout) {
+    if (blives <= 0) {
+      if (keyCode == ENTER && canEnter) {
+        bscoring();
+        if (x == 1) {
+          ballReset();
+        } else if (x == 2) {
+          ballReset();
+          inBreakout = false;
+          inMenu = true;
+        }
+        canEnter = false;
+      }
+      if (canChoose && ((keyCode == UP)||(keyCode == DOWN))) {
+        if (x == 1) {
+          x = 2;
+        } else if (x == 2) {
+          x = 1;
+        }
+      }
+    } else {
+      if (bpaused) {
+        if ((keyCode == UP)||(keyCode == DOWN)) {
+          if (x == 1) {
+            x = 2;
+          } else if (x == 2) {
+            x = 1;
+          }
+        }
+        if (keyCode == ENTER && canEnter) {
+          if (x == 1) {
+            bpaused = false;
+          } else if (x == 2) {
+            ballReset();
+            inBreakout = false;
+            inMenu = true;
+          }
+          canEnter = false;
+        }
+      } else {
+        if (keyCode == ENTER && canEnter) {
+          bpaused = true;
+          canEnter = false;
+        }
+        if (keyCode == LEFT && bx - width/10 > width/10) {
+          bx = bx - width/10;
+        }
+        if (keyCode == RIGHT && bx + width/10 < width) {
+          bx = bx + width/10;
+        }
+      }
+    }
+  }
+  if (inAsteroids) {
+    if (alives <= 0) {
+      if (canChoose && ((keyCode == UP)||(keyCode == DOWN))) {
+        if (x == 1) {
+          x = 2;
+        } else if (x == 2) {
+          x = 1;
+        }
+      }
+      if (keyCode == ENTER && canEnter) {
+        if (x == 1) {
+          ascoring();
+          areset();
+        } else if (x == 2) {
+          ascoring();
+          areset();
+          inAsteroids = false;
+          inMenu = true;
+        }
+        canEnter = false;
+      }
+    } else {
+      if (apaused) {
+        if ((keyCode == UP)||(keyCode == DOWN)) {
+          if (x == 1) {
+            x = 2;
+          } else if (x == 2) {
+            x = 1;
+          }
+        }
+        if (keyCode == ENTER && canEnter) {
+          if (x == 1) {
+            apaused = false;
+          } else if (x == 2) {
+            areset();
+            inAsteroids = false;
+            inMenu = true;
+          }
+          canEnter = false;
+        }
+      } else {
+        if (keyCode == ENTER && canEnter) {
+          apaused = true;
+          canEnter = false;
+        }
+        if (millis() - am > 1000) {
+          if (keyCode == LEFT) {
+            aleft = true;
+          }
+          if (keyCode == RIGHT) {
+            aright = true;
+          }
+          if (keyCode == UP) {
+            aup = true;
+          }
+          if (keyCode == DOWN && acanshoot && alives > 0 && apaused == false) {
+            alx[athel] = ax + sin(aangle)*40;
+            aly[athel] = ay - cos(aangle)*40;
+            alxs[athel] = sin(aangle)*10;
+            alys[athel] = -cos(aangle)*10;
+            athel = athel + 1;
+            if (athel > alx.length - 1) {
+              athel = 0;
+            }
+            acanshoot = false;
+          }
+        }
+      }
+    }
+  }
+  if (inPong) {
+    if ((puscore == 11)||(pescore == 11)) {
+      if (canChoose && ((keyCode == UP)||(keyCode == DOWN))) {
+        if (x == 1) {
+          x = 2;
+        } else if (x == 2) {
+          x = 1;
+        }
+      }
+      if (keyCode == ENTER && canEnter) {
+        if (x == 1) {
+          pscoring();
+          pallReset();
+        } else if (x == 2) {
+          pallReset();
+          inPong = false;
+          inMenu = true;
+        }
+        canEnter = false;
+      }
+    } else {
+      if (ppaused) {
+        if ((keyCode == UP)||(keyCode == DOWN)) {
+          if (x == 1) {
+            x = 2;
+          } else if (x == 2) {
+            x = 1;
+          }
+        }
+        if (keyCode == ENTER && canEnter) {
+          if (x == 1) {
+            ppaused = false;
+          } else if (x == 2) {
+            pallReset();
+            inPong = false;
+            inMenu = true;
+          }
+          canEnter = false;
+        }
+      } else {
+        if (keyCode == ENTER && canEnter) {
+          ppaused = true;
+          canEnter = false;
+        }
+        if (keyCode == UP && puy > 0) {
+          puy = puy - height/12;
+        }
+        if (keyCode == DOWN && puy + height/6 < height) {
+          puy = puy + height/12;
+        }
+      }
+    }
+  }
+  if (inInvaders) {
+    if (ilives <= 0) {
+      if (canChoose && ((keyCode == UP)||(keyCode == DOWN))) {
+        if (x == 1) {
+          x = 2;
+        } else if (x == 2) {
+          x = 1;
+        }
+      }
+      if (keyCode == ENTER && canEnter) {
+        iscoring();
+        if (x == 1) {
+          iallReset();
+        } else if (x == 2) {
+          iallReset();
+          inInvaders = false;
+          inMenu = true;
+        }
+        canEnter = false;
+      }
+    } else {
+      if (ipaused) {
+        if ((keyCode == UP)||(keyCode == DOWN)) {
+          if (x == 1) {
+            x = 2;
+          } else if (x == 2) {
+            x = 1;
+          }
+        }
+        if (keyCode == ENTER && canEnter) {
+          if (x == 1) {
+            ipaused = false;
+          } else if (x == 2) {
+            iallReset();
+            inInvaders = false;
+            inMenu = true;
+          }
+          canEnter = false;
+        }
+      } else {
+        if (keyCode == ENTER && canEnter) {
+          ipaused = true;
+          canEnter = false;
+        }
+        if (keyCode == LEFT) {
+          ileft = true;
+        }
+        if (keyCode == RIGHT) {
+          iright = true;
+        }
+        if (keyCode == UP && ilives > 0 && ilx == -100 && millis() - iudm >= 2000) {
+          ilx = ix;
+          ily = height - 50;
+        }
+      }
+    }
+  }
+  if (inMenu) {
+    if (keyCode == ENTER && canEnter) {
+      if (x == 1) {
+        inMenu = false;
+        inBreakout = true;
+        bm = millis();
+      } else if (x == 2) {
+        inMenu = false;
+        inAsteroids = true;
+      } else if (x == 3) {
+        inMenu = false;
+        inPong = true;
+      } else if (x == 4) {
+        inMenu = false;
+        inInvaders = true;
+      }
+      x = 1;
+      canEnter = false;
+    }
+    if (canChoose) {
+      if ((keyCode == LEFT)||(keyCode == RIGHT)) {
+        if (x == 4) {
+          x = 3;
+        } else if (x == 3) {
+          x = 4;
+        } else if (x == 2) {
+          x = 1;
+        } else if (x == 1) {
+          x = 2;
+        }
+      }
+      if ((keyCode == UP)||(keyCode == DOWN)) {
+        if (x == 4) {
+          x = 2;
+        } else if (x == 3) {
+          x = 1;
+        } else if (x == 2) {
+          x = 4;
+        } else if (x == 1) {
+          x = 3;
+        }
+      }
+      canChoose = false;
+    }
+  }
+  if (inIntro && keyCode == ENTER && canEnter) {
+    inIntro = false;
+    inMenu = true;
+    canEnter = false;
+  }
+}
+
+void keyReleased() {
+  canChoose = true;
+  if (keyCode == ENTER) {
+    canEnter = true;
+  }
+  if (inAsteroids) {
+    if (keyCode == LEFT) {
+      aleft = false;
+    }
+    if (keyCode == RIGHT) {
+      aright = false;
+    }
+    if (keyCode == UP) {
+      aup = false;
+    }
+    if (keyCode == DOWN) {
+      acanshoot = true;
+    }
+  }
+  if (inInvaders) {
+    if (keyCode == LEFT) {
+      ileft = false;
+    }
+    if (keyCode == RIGHT) {
+      iright = false;
+    }
+  }
+}
